@@ -1,4 +1,4 @@
-name: Test PR Guard
+name: PR Guard
 on:
   pull_request:
     types: [opened, synchronize]
@@ -8,10 +8,16 @@ permissions:
   pull-requests: write
 
 jobs:
-  test:
+  guard:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: JNewtons/pr-size-guard@v1
+      - uses: JNewtons/pr-size-guard@v1.2   # bruk @v1.2 for testing nå; bytt til @v1 etterpå
+        with:
+          max_lines: "400"
+          test_paths: "tests,__tests__"
+          exclude: "**/package-lock.json,**/*.min.js"
+          mode: "warn"
+          retries: "2"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
